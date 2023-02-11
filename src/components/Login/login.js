@@ -1,8 +1,7 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
-import {Link} from 'react-router-dom'
+import {Link,Redirect} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import {Redirect} from 'react-router-dom'
 import {FaGraduationCap, FaFacebook, FaTwitter} from 'react-icons/fa'
 import {FcGoogle} from 'react-icons/fc'
 import './login.css'
@@ -14,14 +13,21 @@ class Login extends Component {
     password: '',
     email:'',
     errorMsg: '',
+    role:[],
+    agree:false,
     showPassword:'',
     showSubmitError: false,
   }
 
   onSubmitSuccess = jwtToken => {
+    // console.log(jwtToken)
     const {history} = this.props
-    history.push('/')
+    console.log(history)
+    history.replace('/signin')
+    
+    
     Cookies.set('jwt_token', jwtToken, {expires: 30})
+    
   }
 
   onSubmitFailure = errorMsg => {
@@ -30,12 +36,13 @@ class Login extends Component {
 
   submitForm = async event => {
     event.preventDefault()
-    const {username, password,email} = this.state
-    const userDetails = {username, password,email}
+    const {username, password,email,role} = this.state
+    const userDetails = {username, password,email,role}
     
     const url = 'https://apis.ccbp.in/login'
     const options = {
       method: 'POST',
+      headers:{'content-Type':'application/json'},
       body: JSON.stringify(userDetails),
     }
     const response = await fetch(url, options)
@@ -43,6 +50,7 @@ class Login extends Component {
     
     if (response.ok === true) {
       this.onSubmitSuccess(data.jwt_token)
+      alert("User Successfully Registerd!")
     } else {
       this.onSubmitFailure(data.error_msg)
     }
@@ -64,6 +72,19 @@ class Login extends Component {
     this.setState(preState => ({showPassword:!preState.showPassword}))
   }
 
+  onRole = (event) => {
+    this.setState({developer:event.target.value})
+    const {value,checked} = event.target
+    if (checked){
+      this.setState(preState => ({role:[...preState.role,value]}))
+    }
+    
+  }
+
+  onCheck = (event) => {
+    this.setState({agree:event.target.checked})
+  }
+
   render() {
     const {
       username,
@@ -74,13 +95,14 @@ class Login extends Component {
       showSubmitError,
     } = this.state
 
-    // console.log(showSubmitError)
-    // const jwtToken = Cookies.get('jwt_token')
-    // console.log(jwtToken)
-    // if (jwtToken !== undefined) {
-    //   return <Redirect to="/" />
-    // }
-    // console.log(errorMsg)
+    
+    
+    const jwtToken = Cookies.get('jwt_token')
+    console.log(jwtToken)
+    if (jwtToken !== undefined) {
+      return <Redirect to="/signin" />
+    }
+    
     return (
       <div className="login-form-main-container">
         <div className="login-form-container d-flex flex-column justify-content-center">
@@ -102,8 +124,10 @@ class Login extends Component {
                     type="checkbox"
                     id="developer"
                     name="learning"
+                    value="Developer"
                     className="checkbox-input"
-                  />
+                    onChange={this.onRole}
+                  />  
                   <label htmlFor="developer" className="checkbox-name">
                     Developer
                   </label>
@@ -113,8 +137,10 @@ class Login extends Component {
                     type="checkbox"
                     id="client"
                     name="learning"
+                    value="Client"
                     className="checkbox-input"
-                  />
+                    onChange={this.onRole}
+                  />  
                   <label htmlFor="client" className="checkbox-name">
                     Client
                   </label>
@@ -124,9 +150,11 @@ class Login extends Component {
                   <input
                     type="checkbox"
                     id="vender"
+                    value="Vender"
                     name="learning"
                     className="checkbox-input"
-                  />
+                    onChange={this.onRole}
+                  />  
                   <label htmlFor="vender" className="checkbox-name">
                     Vender
                   </label>
@@ -168,7 +196,7 @@ class Login extends Component {
                 {/* <p className='error-message'>{passwordErrorMsg}</p> */}
               </div>
               <div className="agree-inputbox-container d-flex flex-row justify-content-center align-items-center">
-                <input type="checkbox" className="checkbox-input " id="agree" />
+                <input type="checkbox" className="checkbox-input" id="agree" onChange={this.onCheck} />
                 <label htmlFor="agree" className="checkbox-name text-secondary">
                   I Agree with Terms & Condition
                 </label>
@@ -176,7 +204,8 @@ class Login extends Component {
               <button type="submit" className="btn btn-primary w-100 mt-2 mb-2" >
                 LOGIN
               </button>
-              <div className="agree-inputbox-container d-flex ">
+              {showSubmitError && <p className='error-message'>{errorMsg}</p>}
+              <div className="member-of-community-container d-flex ">
                 <span id="agree" className="sign-up-line text-secondary">
                   Member of the Community?
                   <Link to="/signin" className="sign-up-link">Sign IN</Link>

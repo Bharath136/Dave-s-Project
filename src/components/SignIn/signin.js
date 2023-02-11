@@ -14,13 +14,14 @@ class SignIn extends Component {
     password: '',
     email:'',
     errorMsg: '',
+    agree:false,
     showSubmitError: false,
     showPassword:false,
   }
 
   onSubmitSuccess = jwtToken => {
     const {history} = this.props
-    history.push('/')
+    history.replace('/')
     Cookies.set('jwt_token', jwtToken, {expires: 30})
   }
 
@@ -63,9 +64,12 @@ class SignIn extends Component {
     this.setState(preState => ({showPassword:!preState.showPassword}))
   }
 
+  onCheck = (event) => {
+    this.setState({agree:event.target.checked})
+  }
+
   render() {
     const {
-      username,
       password,
       email,
       errorMsg,
@@ -74,8 +78,8 @@ class SignIn extends Component {
     } = this.state
 
     console.log(showSubmitError)
-    const jwtToken = Cookies.get('jwt_token')
-    console.log(jwtToken)
+
+    // const jwtToken = Cookies.get('jwt_token')
     // if (jwtToken !== undefined) {
     //   return <Redirect to="/" />
     // }
@@ -124,7 +128,7 @@ class SignIn extends Component {
               </div>
               <div className="agree-inputbox-container">
                 <div className='forgot-password-container'>
-                <input type="checkbox" className="checkbox-input " id="agree" />
+                <input type="checkbox" className="checkbox-input " id="agree" onChange={this.onCheck}/>
                   <label htmlFor="agree" className="checkbox-name text-secondary">
                     Remember me
                 </label>
@@ -134,7 +138,7 @@ class SignIn extends Component {
               <button type="submit" className="btn btn-primary w-100 mt-2 mb-2" >
                 LOGIN
               </button>
-              <div className="agree-inputbox-container d-flex ">
+              <div className="member-of-community-container d-flex ">
                 <span id="agree" className="sign-up-line text-secondary">
                   New to the Community?
                   <Link to="/login" className="sign-up-link">Create Account</Link>

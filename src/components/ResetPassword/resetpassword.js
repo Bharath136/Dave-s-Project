@@ -1,10 +1,7 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
-import {Link} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import {Redirect} from 'react-router-dom'
-import {FaGraduationCap, FaFacebook, FaTwitter} from 'react-icons/fa'
-import {FcGoogle} from 'react-icons/fc'
+import {Redirect} from 'react-router-dom'
 import './resetpassword.css'
 import {BsEyeSlash,BsEye} from 'react-icons/bs'
 
@@ -12,7 +9,6 @@ class ResetPassword extends Component {
   state = {
     newPassword: '',
     confirmPassword: '',
-    email:'',
     errorMsg: '',
     showConPassword:'',
     showNewPassword:'',
@@ -21,7 +17,7 @@ class ResetPassword extends Component {
 
   onSubmitSuccess = jwtToken => {
     const {history} = this.props
-    history.push('/')
+    history.replace('/signin')
     Cookies.set('jwt_token', jwtToken, {expires: 30})
   }
 
@@ -33,9 +29,13 @@ class ResetPassword extends Component {
     event.preventDefault()
     const {newPassword, confirmPassword,email} = this.state
     const userDetails = {newPassword, confirmPassword,email}
+
+    console.log(JSON.stringify(userDetails))
+
     const url = 'https://apis.ccbp.in/login'
     const options = {
       method: 'POST',
+      headers:{'content-Type':'application/json'},
       body: JSON.stringify(userDetails),
     }
     const response = await fetch(url, options)
@@ -69,7 +69,6 @@ class ResetPassword extends Component {
     const {
       newPassword,
       confirmPassword,
-      email,
       errorMsg,
       showSubmitError,
       showConPassword,
@@ -77,11 +76,12 @@ class ResetPassword extends Component {
     } = this.state
 
     console.log(showSubmitError)
+
     const jwtToken = Cookies.get('jwt_token')
-    console.log(jwtToken)
-    // if (jwtToken !== undefined) {
-    //   return <Redirect to="/" />
-    // }
+    if (jwtToken !== undefined) {
+      return <Redirect to="/signin" />
+    }
+
     console.log(errorMsg)
     return (
       <div className="reset-passward-form-main-container">
@@ -106,7 +106,7 @@ class ResetPassword extends Component {
                 <div className='password-input-container'>
                   <input
                     type={showNewPassword ? 'text':"password"}
-                    placeholder="Password"
+                    placeholder="New Password"
                       required
                     className="password-input-field"
                     value={newPassword}
@@ -120,7 +120,7 @@ class ResetPassword extends Component {
                 <div className='password-input-container'>
                   <input
                     type={showConPassword ? 'text':"password"}
-                    placeholder="Password"
+                    placeholder="confirm Password"
                       required
                     className="password-input-field"
                     value={confirmPassword}

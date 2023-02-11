@@ -181,6 +181,12 @@
     justify-content: space-between;
     font-size: 14px;
   }
+
+  .member-of-community-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
   .sign-up-line {
     margin-top: 10px;

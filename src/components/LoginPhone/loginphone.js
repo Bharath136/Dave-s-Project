@@ -2,7 +2,7 @@ import {Component} from 'react'
 import Cookies from 'js-cookie'
 import {Link} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import {Redirect} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import {FaGraduationCap, FaFacebook, FaTwitter} from 'react-icons/fa'
 import {FcGoogle} from 'react-icons/fc'
 import './loginphone.css'
@@ -10,6 +10,7 @@ import './loginphone.css'
 class LoginPhone extends Component {
   state = {
     number:'',
+    agree:false,
     errorMsg: '',
     showSubmitError: false,
   }
@@ -24,6 +25,8 @@ class LoginPhone extends Component {
     this.setState({showSubmitError: true, errorMsg})
   }
 
+
+  //------------------  submitting data to api  ---------------------
   submitForm = async event => {
     event.preventDefault()
     const {number} = this.state
@@ -32,6 +35,7 @@ class LoginPhone extends Component {
     const url = 'https://apis.ccbp.in/login'
     const options = {
       method: 'POST',
+      headers:{'content-Type':'application/json'},
       body: JSON.stringify(userDetails),
     }
     const response = await fetch(url, options)
@@ -48,7 +52,9 @@ class LoginPhone extends Component {
     this.setState({number: event.target.value})
   }
 
-
+  onCheck = (event) => {
+    this.setState({agree:event.target.checked})
+  }
 
   render() {
     const {
@@ -57,12 +63,13 @@ class LoginPhone extends Component {
       showSubmitError,
     } = this.state
 
-    // console.log(showSubmitError)
-    // const jwtToken = Cookies.get('jwt_token')
-    // console.log(jwtToken)
-    // if (jwtToken !== undefined) {
-    //   return <Redirect to="/" />
-    // }
+    console.log(showSubmitError)
+
+    const jwtToken = Cookies.get('jwt_token')
+    console.log(jwtToken)
+    if (jwtToken !== undefined) {
+      return <Redirect to="/" />
+    }
     console.log(errorMsg)
     return (
       <div className="login-phone-form-main-container">
@@ -92,7 +99,7 @@ class LoginPhone extends Component {
               </div>
               <div className="login-phone-agree-inputbox-container d-flex">
                 <div className='login-phone-password-container'>
-                    <input type="checkbox" className="login-phone-checkbox-input" id="agree" />
+                    <input type="checkbox" className="login-phone-checkbox-input" id="agree" onChange={this.onCheck}/>
                     <label htmlFor="agree" className="login-phone-checkbox-name text-secondary">
                     Remember me
                     </label>

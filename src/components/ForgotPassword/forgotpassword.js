@@ -1,10 +1,7 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
-import {Link} from 'react-router-dom'
+import {Link,Redirect} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import {Redirect} from 'react-router-dom'
-import {FaGraduationCap, FaFacebook, FaTwitter} from 'react-icons/fa'
-import {FcGoogle} from 'react-icons/fc'
 import './forgotpassword.css'
 
 class ForgotPassword extends Component {
@@ -24,6 +21,7 @@ class ForgotPassword extends Component {
     this.setState({showSubmitError: true, errorMsg})
   }
 
+  //----------------  submitting data to api  --------------------
   submitForm = async event => {
     event.preventDefault()
     const {email} = this.state
@@ -32,6 +30,7 @@ class ForgotPassword extends Component {
     const url = 'https://apis.ccbp.in/login'
     const options = {
       method: 'POST',
+      headers:{'content-Type':'application/json'},
       body: JSON.stringify(userDetails),
     }
     const response = await fetch(url, options)
@@ -56,11 +55,13 @@ class ForgotPassword extends Component {
     } = this.state
 
     console.log(showSubmitError)
-    // const jwtToken = Cookies.get('jwt_token')
-    // console.log(jwtToken)
-    // if (jwtToken !== undefined) {
-    //   return <Redirect to="/" />
-    // }
+
+    const jwtToken = Cookies.get('jwt_token')
+    console.log(jwtToken)
+    if (jwtToken !== undefined) {
+      return <Redirect to="/signin" />
+    }
+
     console.log(errorMsg)
     return (
       <div className="forgot-passward-form-main-container">

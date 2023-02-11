@@ -2,13 +2,14 @@ import {Component} from 'react'
 import Cookies from 'js-cookie'
 import {Link} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import {Redirect} from 'react-router-dom'
-import {FaGraduationCap, FaFacebook, FaTwitter} from 'react-icons/fa'
+import {Redirect} from 'react-router-dom'
+import {FaFacebook, FaTwitter} from 'react-icons/fa'
 import {FcGoogle} from 'react-icons/fc'
 import './loginotp.css'
 
 class LoginOTP extends Component {
   state = {
+    otpNumber:'',
     otpNumber1:'',
     otpNumber2:'',
     otpNumber3:'',
@@ -21,7 +22,7 @@ class LoginOTP extends Component {
 
   onSubmitSuccess = jwtToken => {
     const {history} = this.props
-    history.push('/')
+    history.replace('/')
     Cookies.set('jwt_token', jwtToken, {expires: 30})
   }
 
@@ -31,12 +32,22 @@ class LoginOTP extends Component {
 
   submitForm = async event => {
     event.preventDefault()
-    const {otpNumber1,otpNumber2,otpNumber3,otpNumber4,otpNumber5,otpNumber6} = this.state
-    const userDetails = {otpNumber1,otpNumber2,otpNumber3,otpNumber4,otpNumber5,otpNumber6}
-    console.log(userDetails)
+
+    // ---------------  6 input field otp data  -----------------
+    // const {otpNumber1,otpNumber2,otpNumber3,otpNumber4,otpNumber5,otpNumber6} = this.state
+    // const userDetails = {otpNumber1,otpNumber2,otpNumber3,otpNumber4,otpNumber5,otpNumber6}
+
+    // ---------------  1 input field otp data  -----------------
+    const {otpNumber} = this.state
+    const userDetails = {otpNumber}
+
+    
+    // console.log(JSON.stringify(userDetails))
+
     const url = 'https://apis.ccbp.in/login'
     const options = {
       method: 'POST',
+      headers:{'content-Type':'application/json'},
       body: JSON.stringify(userDetails),
     }
     const response = await fetch(url, options)
@@ -47,6 +58,10 @@ class LoginOTP extends Component {
     } else {
       this.onSubmitFailure(data.error_msg)
     }
+  }
+
+  onChangeotpNumber = event => {
+    this.setState({otpNumber: event.target.value})
   }
 
   onChangeotpNumber1 = event => {
@@ -72,24 +87,36 @@ class LoginOTP extends Component {
   onChangeotpNumber6 = event => {
     this.setState({otpNumber6: event.target.value})
   }
+  
+  // clickEvent = (first,last) => {
+  //   if(first){
+  //     document.getElementById(last).focus()
+  //   }
+  // }
 
-
+  onClickResendOtp = () => {
+    this.setState({otpNumber:'',showSubmitError:false})
+    console.log("OTP Resended....")
+  }
 
   render() {
     const {
-        otpNumber1,otpNumber2,otpNumber3,otpNumber4,otpNumber5,otpNumber6,
+        otpNumber,
+        // otpNumber1,otpNumber2,otpNumber3,otpNumber4,otpNumber5,otpNumber6,
       errorMsg,
       showSubmitError,
     } = this.state
 
-    const showResend = otpNumber1 !== '' && otpNumber2 !== '' && otpNumber3 !== '' && otpNumber4 !== '' && otpNumber5 !== '' &&otpNumber6 !== '' 
+    // const showResend = otpNumber1 !== '' && otpNumber2 !== '' && otpNumber3 !== '' && otpNumber4 !== '' && otpNumber5 !== '' &&otpNumber6 !== '' 
     
-    // console.log(showSubmitError)
-    // const jwtToken = Cookies.get('jwt_token')
-    // console.log(jwtToken)
-    // if (jwtToken !== undefined) {
-    //   return <Redirect to="/" />
-    // }
+    const showResend6 = otpNumber.length === 6
+
+    console.log(showSubmitError)
+    const jwtToken = Cookies.get("jwt_token")
+    
+    if (jwtToken !== undefined) {
+      return <Redirect to="/" />
+    }
     console.log(errorMsg)
     return (
       <div className="login-otp-form-main-container">
@@ -105,70 +132,102 @@ class LoginOTP extends Component {
             <form className="form" onSubmit={this.submitForm}>
               
               <div className="login-otp-input-fields-container">
+              <input
+                  type="text"
+                  placeholder="Enter OTP"
+                  required
+                  maxLength={6}
+                  id="second"
+                  className="digit-6-login-otp-input-field"
+                  value={otpNumber}
+                  onChange={this.onChangeotpNumber}
+                />
+              
+                
+                {/*
+
+                -------------------  6 input fields  ----------------------
+
                 <input
                   type="text"
-                //   placeholder="Enter OTP"
+                  id='first'
                   required
                   maxLength={1}
                   className="login-otp-input-field"
                   value={otpNumber1}
                   onChange={this.onChangeotpNumber1}
+                  onKeyUp={this.clickEvent(this,'second')}
                 />
                 <input
                   type="text"
                 //   placeholder="Enter OTP"
                   required
                   maxLength={1}
+                  id="second"
                   className="login-otp-input-field"
                   value={otpNumber2}
                   onChange={this.onChangeotpNumber2}
+                  onKeyUp={this.clickEvent(this,'third')}
                 />
                 <input
                   type="text"
                 //   placeholder="Enter OTP"
+                  id='third'
                   required
                   maxLength={1}
                   className="login-otp-input-field"
                   value={otpNumber3}
                   onChange={this.onChangeotpNumber3}
+                  onKeyUp={this.clickEvent(this,'fourth')}
                 />
                 <input
                   type="text"
                 //   placeholder="Enter OTP"
+                  id='fourth'
                   required
                   maxLength={1}
                   className="login-otp-input-field"
                   value={otpNumber4}
                   onChange={this.onChangeotpNumber4}
+                  onKeyUp={this.clickEvent(this,'fifth')}
                 />
                 <input
                   type="text"
                 //   placeholder="Enter OTP"
+                  id='fifth'
                   required
                   maxLength={1}
                   className="login-otp-input-field"
                   value={otpNumber5}
                   onChange={this.onChangeotpNumber5}
+                  onKeyUp={this.clickEvent(this,'sixth')}
                 />
                 <input
                   type="text"
                 //   placeholder="Enter OTP"
+                  id='sixth'
                   required
                   maxLength={1}
                   className="login-otp-input-field"
                   value={otpNumber6}
                   onChange={this.onChangeotpNumber6}
-                />
+                /> */}
               </div>
-                
-              <button type="submit" className={`otp-btn w-100 mt-2 mb-2 ${showResend && "login-otp-button"}`} >
+              {showSubmitError && <p className='otp-error'>Incorrect OTP, Please try again or Resend OTP</p>}
+              {!showResend6 && <div className='login-otp-resend-container'>
+                <p  className="login-otp-resend text-secondary">
+                      Haven't recieved the OTP? 
+                  </p>
+                  <button type='button' className='otp-resend' onClick={this.onClickResendOtp}>Resend</button>
+              </div>}
+              <button type="submit" className={`otp-btn w-100 mt-4 mb-2 ${showResend6 && "login-otp-button"}`} >
                 LOGIN
               </button>
-              {showResend && <div className='login-otp-resend-container'>
+              {showResend6 && <div className='login-otp-resend-container'>
                   <p  className="login-otp-resend text-secondary">
                         Haven't recieved the OTP? 
                     </p>
-                    <p className='otp-resend'>Resend</p>
+                    <button type='button' className='otp-resend' onClick={this.onClickResendOtp}>Resend</button>
                 </div>}
             </form>
           </div>

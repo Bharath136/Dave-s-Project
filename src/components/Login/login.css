@@ -173,6 +173,12 @@
   .input-field:invalid ~ .error-message {
     display: block;
   }
+
+  .member-of-community-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
   .sign-up-line {
     margin-top: 10px;

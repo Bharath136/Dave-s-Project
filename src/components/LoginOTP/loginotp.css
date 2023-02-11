@@ -130,22 +130,54 @@
     }
   }
 
+  /* 6 digit input field css*/
+
+.digit-6-login-otp-input-field{
+  width: 100%;
+  outline: none;
+    border: 1px solid rgb(155, 155, 155);
+    border-radius: 4px;
+    font-size: 16px;
+    /* margin-bottom: 20px; */
+    padding: 12px;
+
+}
+
 
   .login-otp-resend-container{
     display: flex;
     align-items: center;
     gap: 10px;
     justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+
+  .login-otp-resend{
+    margin-bottom:0 ;
+    font-size: 14px;
   }
 
   .otp-resend{
     color: #0a3cb0;
+    cursor: pointer;
+    background-color: transparent;
+    outline: none;
+    border: 0;
+    padding: 0;
     cursor: pointer;
   }
   @media screen and (max-width:767px) {
     .otp-resend{
         font-size: 14px;
     }
+  }
+
+  .otp-error{
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+    margin-bottom: 0;
   }
   
   
