@@ -35,7 +35,6 @@ class LoginPhone extends Component {
     const url = 'https://apis.ccbp.in/login'
     const options = {
       method: 'POST',
-      headers:{'content-Type':'application/json'},
       body: JSON.stringify(userDetails),
     }
     const response = await fetch(url, options)

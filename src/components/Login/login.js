@@ -42,7 +42,6 @@ class Login extends Component {
     const url = 'https://apis.ccbp.in/login'
     const options = {
       method: 'POST',
-      headers:{'content-Type':'application/json'},
       body: JSON.stringify(userDetails),
     }
     const response = await fetch(url, options)
@@ -50,7 +49,6 @@ class Login extends Component {
     
     if (response.ok === true) {
       this.onSubmitSuccess(data.jwt_token)
-      alert("User Successfully Registerd!")
     } else {
       this.onSubmitFailure(data.error_msg)
     }
