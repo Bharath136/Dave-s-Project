@@ -17,10 +17,9 @@ class ResetPassword extends Component {
   }
 
 
-  onSubmitSuccess = jwtToken => {
+  onSubmitSuccess = () => {
     const { history } = this.props
     history.replace('/signin')
-    Cookies.set('jwt_token', jwtToken, { expires: 30 })
   }
 
   onSubmitFailure = errorMsg => {
@@ -43,9 +42,9 @@ class ResetPassword extends Component {
     const data = await response.json()
     console.log(data)
     if (response.ok === true) {
-      this.onSubmitSuccess(data.jwt_token)
+      this.onSubmitSuccess()
     } else {
-      this.onSubmitFailure(data.error_msg)
+      this.onSubmitFailure(data.error)
     }
   }
 

@@ -37,13 +37,11 @@ class SignIn extends Component {
     event.preventDefault()
     const { password, email } = this.state
     const userDetails = { password, email }
-
-    //------------------  posting data to the api  ---------------------
-
     const url = LOGIN_API_URL
     const options = {
       method: 'POST',
       body: JSON.stringify(userDetails),
+      headers: { 'Content-Type': 'application/json' },
     }
     const response = await fetch(url, options)
     const data = await response.json()
@@ -51,7 +49,7 @@ class SignIn extends Component {
     if (response.ok === true) {
       this.onSubmitSuccess(data.jwt_token)
     } else {
-      this.onSubmitFailure(data.error_msg)
+      this.onSubmitFailure(data.error)
     }
   }
 

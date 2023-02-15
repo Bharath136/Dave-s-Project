@@ -21,10 +21,10 @@ class Register extends Component {
   }
 
 
-  onSubmitSuccess = (jwtToken) => {
+  onSubmitSuccess = () => {
     const history = createBrowserHistory()
     history.replace('/signin')
-    console.log(jwtToken)
+   
   }
 
   onSubmitFailure = errorMsg => {
@@ -43,14 +43,15 @@ class Register extends Component {
     const options = {
       method: 'POST',
       body: JSON.stringify(userDetails),
+      headers: { 'Content-Type': 'application/json' },
     }
     const response = await fetch(url, options)
     const data = await response.json()
 
     if (response.ok === true) {
-      this.onSubmitSuccess(data.jwt_token)
+      this.onSubmitSuccess()
     } else {
-      this.onSubmitFailure(data.error_msg)
+      this.onSubmitFailure(data.error)
     }
   }
 
@@ -191,7 +192,7 @@ class Register extends Component {
                     {showPassword ? <BsEyeSlash className='register-eye-icon' /> :
                       <BsEye className='register-eye-icon' />}
                   </button>
-
+                  {showSubmitError && <p className='error-message'>{errorMsg}</p>}
                 </div>
               </div>
               <div className="register-agree-inputbox-container d-flex flex-row justify-content-center align-items-center mb-2">

@@ -25,10 +25,9 @@ class LoginOTP extends Component {
   //   // otpNumber1.focus();
   // }
 
-  onSubmitSuccess = jwtToken => {
+  onSubmitSuccess = () => {
     const history = createBrowserHistory()
     history.replace('/')
-    Cookies.set('jwt_token', jwtToken, { expires: 30 })
   }
 
   onSubmitFailure = errorMsg => {
@@ -61,7 +60,7 @@ class LoginOTP extends Component {
     const data = await response.json()
 
     if (response.ok === true) {
-      this.onSubmitSuccess(data.jwt_token)
+      this.onSubmitSuccess()
     } else {
       this.onSubmitFailure(data.error_msg)
     }

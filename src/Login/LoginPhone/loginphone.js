@@ -15,10 +15,9 @@ class LoginPhone extends Component {
     showSubmitError: false,
   }
 
-  onSubmitSuccess = jwtToken => {
+  onSubmitSuccess = () => {
     const { history } = this.props
-    history.push('/')
-    Cookies.set('jwt_token', jwtToken, { expires: 30 })
+    history.push('/loginotp')
   }
 
   onSubmitFailure = errorMsg => {
@@ -30,8 +29,8 @@ class LoginPhone extends Component {
 
   submitForm = async event => {
     event.preventDefault()
-    const { number } = this.state
-    const userDetails = { number }
+    const { number,agree } = this.state
+    const userDetails = { number,agree }
     console.log(userDetails)
     const url = PHONE_API_URL
     const options = {
@@ -42,9 +41,9 @@ class LoginPhone extends Component {
     const data = await response.json()
 
     if (response.ok === true) {
-      this.onSubmitSuccess(data.jwt_token)
+      this.onSubmitSuccess()
     } else {
-      this.onSubmitFailure(data.error_msg)
+      this.onSubmitFailure(data.error)
     }
   }
 
@@ -63,8 +62,6 @@ class LoginPhone extends Component {
       showSubmitError,
     } = this.state
 
-    console.log(showSubmitError)
-
     //----------------  If user   --------------------
 
     // const jwtToken = Cookies.get('jwt_token')
@@ -73,7 +70,6 @@ class LoginPhone extends Component {
     //   return <Navigate to="/" />
     // }
 
-    console.log(errorMsg)
     return (
       <div className="login-phone-form-main-container">
         <div className="login-phone-form-container d-flex flex-column justify-content-center">
@@ -112,6 +108,7 @@ class LoginPhone extends Component {
               <button type="submit" className="login-phone-login-button w-100" >
                 LOGIN
               </button>
+              {showSubmitError && <p className='error-message'>{errorMsg}</p>}
               <div className="login-phone-status-container">
                 <span id="agree" className="login-phone-sign-up-line text-secondary">
                   New to the Community?
