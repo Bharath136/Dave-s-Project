@@ -1,39 +1,46 @@
-import {Component} from 'react'
+import { Component } from 'react'
 import Cookies from 'js-cookie'
-import {Link} from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-// import {Redirect} from 'react-router-dom'
-import {FaGraduationCap, FaFacebook, FaTwitter} from 'react-icons/fa'
-import {FcGoogle} from 'react-icons/fc'
-import {BsEyeSlash,BsEye} from 'react-icons/bs'
+import { createBrowserHistory } from "history";
+import { FaGraduationCap, FaFacebook, FaTwitter } from 'react-icons/fa'
+import { FcGoogle } from 'react-icons/fc'
+import { BsEyeSlash, BsEye } from 'react-icons/bs'
+import { LOGIN_API_URL } from '../Services'
 import './signin.css'
 
 class SignIn extends Component {
   state = {
     password: '',
-    email:'',
+    email: '',
     errorMsg: '',
-    agree:false,
+    agree: false,
     showSubmitError: false,
-    showPassword:false,
+    showPassword: false,
   }
 
+  //------------------  submit success routing to signin page  ---------------------
+
   onSubmitSuccess = jwtToken => {
-    const {history} = this.props
-    history.replace('/')
-    Cookies.set('jwt_token', jwtToken, {expires: 30})
+    const history = createBrowserHistory()
+    history.replace('/loginphone')
+    Cookies.set('jwt_token', jwtToken, { expires: 30 })
   }
 
   onSubmitFailure = errorMsg => {
-    this.setState({showSubmitError: true, errorMsg})
+    this.setState({ showSubmitError: true, errorMsg })
   }
+
+    //------------------  submiting data to the api  ---------------------
 
   submitForm = async event => {
     event.preventDefault()
-    const {password,email} = this.state
-    const userDetails = {password,email}
-    const url = 'https://apis.ccbp.in/login'
+    const { password, email } = this.state
+    const userDetails = { password, email }
+
+    //------------------  posting data to the api  ---------------------
+
+    const url = LOGIN_API_URL
     const options = {
       method: 'POST',
       body: JSON.stringify(userDetails),
@@ -49,23 +56,23 @@ class SignIn extends Component {
   }
 
   onChangeUsername = event => {
-    this.setState({username: event.target.value})
+    this.setState({ username: event.target.value })
   }
 
   onChangeEmail = (event) => {
-        this.setState({email:event.target.value})
-    }
-
-  onChangePassword = event => {
-    this.setState({password: event.target.value})
+    this.setState({ email: event.target.value })
   }
 
-  onEye = () => {
-    this.setState(preState => ({showPassword:!preState.showPassword}))
+  onChangePassword = event => {
+    this.setState({ password: event.target.value })
+  }
+
+  onShowPassword = () => {
+    this.setState(preState => ({ showPassword: !preState.showPassword }))
   }
 
   onCheck = (event) => {
-    this.setState({agree:event.target.checked})
+    this.setState({ agree: event.target.checked })
   }
 
   render() {
@@ -81,9 +88,11 @@ class SignIn extends Component {
 
     // const jwtToken = Cookies.get('jwt_token')
     // if (jwtToken !== undefined) {
-    //   return <Redirect to="/" />
+    //   return <Navigate to="/loginphone" />
     // }
+  
     console.log(errorMsg)
+
     return (
       <div className="login-form-main-container">
         <div className="login-form-container d-flex flex-column justify-content-center">
@@ -96,59 +105,65 @@ class SignIn extends Component {
           <div className="login-form mt-3">
             <h1 className="login-form-heading ">Welcome to Daway</h1>
             <p className="login-form-description text-secondary">
-              Create to Account to join the community
+              Please sign in here
             </p>
             <form className="form" onSubmit={this.submitForm}>
-              
+
               <div className="input-fields-container">
-                {/* <p className='error-message'>{nameErrorMsg}</p> */}
+
                 <input
                   type="email"
                   placeholder="Email/phone no"
                   required
                   className="input-field"
-                  value={email} 
+                  value={email}
                   onChange={this.onChangeEmail}
                 />
-                {/* <p className='error-message'>{emailErrorMsg}</p> */}
-                <div className='password-input-container'>
+
+                <div className='sign-in-password-input-container'>
                   <input
-                    type={showPassword ? 'text':"password"}
+                    type={showPassword ? 'text' : "password"}
                     placeholder="Password"
-                      required
+                    required
                     className="password-input-field"
                     value={password}
                     onChange={this.onChangePassword}
                   />
-                  <button className='eye-button' type='button' onClick={this.onEye}>
-                    {showPassword ? <BsEyeSlash className='eye-icon'/>:
-                    <BsEye className='eye-icon'/>}
-                    </button>
+
+                  <button className='eye-button' type='button' onClick={this.onShowPassword}>
+                    {showPassword ? <BsEyeSlash className='sign-in-eye-icon' /> :
+                      <BsEye className='sign-in-eye-icon' />}
+                  </button>
                 </div>
               </div>
-              <div className="agree-inputbox-container">
-                <div className='forgot-password-container'>
-                <input type="checkbox" className="checkbox-input " id="agree" onChange={this.onCheck}/>
+
+              <div className="agree-inputbox-container  mb-2">
+                <div className='forgot-password-container d-flex flex-row align-items-center'>
+                  <input type="checkbox" className="checkbox-input " id="agree" onChange={this.onCheck} />
                   <label htmlFor="agree" className="checkbox-name text-secondary">
                     Remember me
-                </label>
+                  </label>
                 </div>
                 <Link to="/forgotpassword" className='forgot-password'>Forgot Password?</Link>
               </div>
-              <button type="submit" className="btn btn-primary w-100 mt-2 mb-2" >
+
+              <button type="submit" className="sign-in-login-button w-100 " >
                 LOGIN
               </button>
+              {showSubmitError && <p className='error-message'>{errorMsg}</p>}
+
               <div className="member-of-community-container d-flex ">
-                <span id="agree" className="sign-up-line text-secondary">
+                <span id="agree" className="sign-in-sign-up-line text-secondary">
                   New to the Community?
-                  <Link to="/login" className="sign-up-link">Create Account</Link>
+                  <Link to="/register" className="sign-in-sign-up-link">Create Account</Link>
                 </span>
               </div>
             </form>
           </div>
+
           <div className="footer-container d-flex justify-content-center">
-            <span className="sign-up-line">Signup with</span>
-            <div className="signup-logos-container">
+            <span className="sign-in-sign-up-line">Signup with</span>
+            <div className="sign-in-signup-logos-container">
               <FaFacebook className="signup-logo facebook" />
               <FaTwitter className="signup-logo twitter" />
               <FcGoogle className="signup-logo google" />

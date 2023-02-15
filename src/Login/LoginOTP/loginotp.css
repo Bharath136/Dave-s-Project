@@ -1,0 +1,274 @@
+.login-otp-form-main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 30px;
+  background-color: #e9e6f8ef;
+}
+@media screen and (max-width:767px) {
+  .login-otp-form-main-container{
+      padding: 0px;
+  }
+}
+
+.login-otp-form-container {
+  box-shadow: 0px 0px 6px #a4a4a4;
+  background-color: #fff;
+  border-radius: 4px; 
+  padding: 40px;
+  width: 440px;
+}
+@media screen and (max-width: 767px) {
+  .login-otp-form-container {
+    padding: 60px;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    border-radius: 0;
+    width: 100%;
+  }
+}
+@media screen and (max-width:300px){
+  .login-otp-form-container{
+    padding: 30px;
+  }
+}
+  
+.login-otp-form {
+  border-bottom: 1px solid #bababa;
+  padding-bottom: 20px;
+}
+@media screen and (max-width:767px) {
+  .login-otp-form{
+    margin-bottom: 40px;
+  }
+}
+
+.login-otp-form-heading {
+  font-size: 20px;
+  color:#5a5a5a;
+}
+@media screen and (max-width: 767px) {
+  .login-otp-form-heading {
+    font-size: 18px;
+  }
+}
+
+
+.login-otp-form-description {
+  font-size: 16px;
+}
+@media screen and (max-width: 767px) {
+  .login-otp-form-description {
+    font-size: 14px;
+  }
+}
+  
+.edit-number-container{
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+@media screen and (max-width:767px) {
+    .edit-number-container{
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 0px;
+        margin-bottom: 30px;
+    }
+}
+
+.edit-number{
+    margin-bottom: 14px;
+    margin-left: 10px;
+    text-decoration: none;
+}
+@media screen and (max-width:767px) {
+  .edit-number{
+      font-size: 12px;
+      margin-top: 2px;
+      margin-left: 0;
+  }
+}
+
+.login-otp-input-fields-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+
+.login-otp-input-field {
+  outline: none;
+  border: 1px solid rgb(155, 155, 155);
+  border-radius: 4px;
+  font-size: 16px;
+  margin-bottom: 0;
+  padding: 12px;
+  padding-left: 20px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media screen and (max-width: 767px) {
+  .login-otp-input-field {
+      padding: 8px;
+      padding-left: 15px;
+      width: 38px;
+      margin-right: 0px;
+      font-size: 14px;
+      margin-bottom: 0;
+  }
+}
+
+  /* 6 digit input field css*/
+
+.digit-6-login-otp-input-field{
+    width: 100%;
+    outline: none;
+    border: 1px solid rgb(155, 155, 155);
+    border-radius: 4px;
+    font-size: 16px;
+    padding: 12px;
+    margin-left: 2px;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@media screen and(max-width:767px){
+  .digit-6-login-otp-input-field{
+    width: 99%;
+    padding: 10px;
+    margin-left: 0px;  
+  }
+}
+
+
+.login-otp-resend-container{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.login-otp-resend{
+  margin-bottom:0 ;
+  font-size: 14px;
+}
+
+.otp-resend{
+  color: #0a3cb0;
+  cursor: pointer;
+  background-color: transparent;
+  outline: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+@media screen and (max-width:767px) {
+  .otp-resend{
+      font-size: 14px;
+  }
+}
+
+.otp-error{
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+
+.login-otp-input-field:invalid ~ .error-message {
+  display: block;
+}
+
+.login-otp-agree-inputbox-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+  
+.forgot-password{
+    text-decoration: none;
+}
+
+
+.otp-btn{
+  background-color: #a59bf0;
+  height: 36px;
+  border-radius: 4px;
+  color: #fff;
+  border: 0;
+  outline: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+@media screen and (max-width:767px) {
+  .otp-btn{
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+}
+
+.login-otp-button{
+  background-color: #0b0feb;
+  transition-duration: .8s;
+}
+
+.sign-up-line {
+  margin-top: 10px;
+  color: rgb(155, 155, 155);
+  cursor: pointer;
+  font-size: 14px;
+}
+@media screen and (max-width:767px) {
+  .sign-up-line{
+    margin-bottom: 40px;
+  }
+}
+
+.sign-up-link {
+  color: #0f4ee1;
+  margin-left: 6px;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.signup-logos-container {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.facebook {
+  color: #0f4ee1;
+}
+
+.twitter {
+  color: #34a1ee;
+}
+
+.signup-logo {
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+}
+
+.error-message {
+  font-size: 12px;
+  color: #ef3f3f;
+  display: none;
+}
+  

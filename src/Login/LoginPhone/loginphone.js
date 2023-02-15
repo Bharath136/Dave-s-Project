@@ -1,45 +1,46 @@
-import {Component} from 'react'
+import { Component } from 'react'
 import Cookies from 'js-cookie'
-import {Link} from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Redirect} from 'react-router-dom'
-import {FaGraduationCap, FaFacebook, FaTwitter} from 'react-icons/fa'
-import {FcGoogle} from 'react-icons/fc'
+import { FaGraduationCap, FaFacebook, FaTwitter } from 'react-icons/fa'
+import { FcGoogle } from 'react-icons/fc'
+import { PHONE_API_URL } from '../Services'
 import './loginphone.css'
 
 class LoginPhone extends Component {
   state = {
-    number:'',
-    agree:false,
+    number: '',
+    agree: false,
     errorMsg: '',
     showSubmitError: false,
   }
 
   onSubmitSuccess = jwtToken => {
-    const {history} = this.props
+    const { history } = this.props
     history.push('/')
-    Cookies.set('jwt_token', jwtToken, {expires: 30})
+    Cookies.set('jwt_token', jwtToken, { expires: 30 })
   }
 
   onSubmitFailure = errorMsg => {
-    this.setState({showSubmitError: true, errorMsg})
+    this.setState({ showSubmitError: true, errorMsg })
   }
 
 
   //------------------  submitting data to api  ---------------------
+
   submitForm = async event => {
     event.preventDefault()
-    const {number} = this.state
-    const userDetails = {number}
+    const { number } = this.state
+    const userDetails = { number }
     console.log(userDetails)
-    const url = 'https://apis.ccbp.in/login'
+    const url = PHONE_API_URL
     const options = {
       method: 'POST',
       body: JSON.stringify(userDetails),
     }
     const response = await fetch(url, options)
     const data = await response.json()
-    
+
     if (response.ok === true) {
       this.onSubmitSuccess(data.jwt_token)
     } else {
@@ -48,11 +49,11 @@ class LoginPhone extends Component {
   }
 
   onChangeNumber = event => {
-    this.setState({number: event.target.value})
+    this.setState({ number: event.target.value })
   }
 
   onCheck = (event) => {
-    this.setState({agree:event.target.checked})
+    this.setState({ agree: event.target.checked })
   }
 
   render() {
@@ -64,17 +65,20 @@ class LoginPhone extends Component {
 
     console.log(showSubmitError)
 
-    const jwtToken = Cookies.get('jwt_token')
-    console.log(jwtToken)
-    if (jwtToken !== undefined) {
-      return <Redirect to="/" />
-    }
+    //----------------  If user   --------------------
+
+    // const jwtToken = Cookies.get('jwt_token')
+    // console.log(jwtToken)
+    // if (jwtToken !== undefined) {
+    //   return <Navigate to="/" />
+    // }
+
     console.log(errorMsg)
     return (
       <div className="login-phone-form-main-container">
         <div className="login-phone-form-container d-flex flex-column justify-content-center">
           <div className="login-phone-form-title-container d-flex flex-row justify-content-center">
-            <div className="logo-container">
+            <div className="login-phone-logo-container">
               <FaGraduationCap className="logo-icon" />
             </div>
             <h1 className="login-phone-form-title ">Learning</h1>
@@ -85,33 +89,33 @@ class LoginPhone extends Component {
               Please sing in here
             </p>
             <form className="form" onSubmit={this.submitForm}>
-              
+
               <div className="login-phone-input-fields-container">
                 <input
                   type="text"
                   placeholder="998888xxxxxxx"
-                    required
+                  required
                   className="login-phone-input-field"
                   value={number}
                   onChange={this.onChangeNumber}
                 />
               </div>
               <div className="login-phone-agree-inputbox-container d-flex">
-                <div className='login-phone-password-container'>
-                    <input type="checkbox" className="login-phone-checkbox-input" id="agree" onChange={this.onCheck}/>
-                    <label htmlFor="agree" className="login-phone-checkbox-name text-secondary">
+                <div className='login-phone-password-container d-flex flex-row align-items-center'>
+                  <input type="checkbox" className="login-phone-checkbox-input" id="agree" onChange={this.onCheck} />
+                  <label htmlFor="agree" className="login-phone-checkbox-name text-secondary">
                     Remember me
-                    </label>
+                  </label>
                 </div>
-                <Link to="/forgotpassword" className='forgot-password'>Forgot Password?</Link>
+                <Link to="/forgotpassword" className='login-phone-forgot-password'>Forgot Password?</Link>
               </div>
-              <button type="submit" className="btn btn-primary w-100 mt-2 mb-2" >
+              <button type="submit" className="login-phone-login-button w-100" >
                 LOGIN
               </button>
-              <div className="login-phone-agree-inputbox-container d-flex ">
-                <span id="agree" className="sign-up-line text-secondary">
+              <div className="login-phone-status-container">
+                <span id="agree" className="login-phone-sign-up-line text-secondary">
                   New to the Community?
-                  <Link to="/login" className="sign-up-link">Create Account</Link>
+                  <Link to="/register" className="login-phone-sign-up-link">Create Account</Link>
                 </span>
               </div>
             </form>
